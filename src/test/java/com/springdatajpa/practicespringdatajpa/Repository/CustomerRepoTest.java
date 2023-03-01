@@ -36,4 +36,36 @@ public class CustomerRepoTest {
             System.out.println("User's name = " + user.getAddress().getCity());    
         });
     }
+    @Test
+    @DisplayName("Count the Customer")
+    public void countTheCustomer(){
+        Long count=repository.count();
+        System.out.println(count);
+    }
+    @Test
+    @DisplayName("To check whether the ID is present or not")
+    public void checkTheRecordPresent(){
+       boolean check=repository.existsById(4L);
+       if(check)System.out.println("Exists");
+       else System.out.println("Not Exists");
+    }
+
+    @Test
+    @DisplayName("Derived Query")
+    public void countUsingLastName(){
+        Long count=repository.countByLastName("Basha");
+        System.out.println(count);
+    }
+    @Test
+    @DisplayName("Derived Query. Using lastName Order by FirstName")
+    public void getCustomerDetailsUsingLastNameOrderByFirstName(){
+        List<Customer> customer=repository.findByLastNameOrderByFirstNameAsc("Basha");
+        System.out.println(customer);
+    }
+    @Test
+    @DisplayName("Derived Query. Using the Property of the Class")
+    public void getCustomerDetailsBasedOnAddress(){
+        List<Customer> customer=repository.findByAddressMandal("Chittoor");
+        System.out.println(customer);
+    }
 }
