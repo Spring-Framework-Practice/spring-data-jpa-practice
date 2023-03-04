@@ -9,3 +9,9 @@ One to Many relationship
 
 ![image](https://user-images.githubusercontent.com/91623908/222579064-bfd894be-c2c3-4135-b142-1bd59de67ed4.png)
 
+
+Many to Many Relationship
+1.Employee.java ---> Project.java
+
+![image](https://user-images.githubusercontent.com/91623908/222902182-d7810906-b491-4713-bd49-aad2c77e5a96.png)
+
