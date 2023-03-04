@@ -13,6 +13,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import com.springdatajpa.practicespringdatajpa.Entity.Book;
 import com.springdatajpa.practicespringdatajpa.Entity.BookCategory;
 
+import jakarta.transaction.Transactional;
+
 @SpringBootTest
 public class BookRepoTest {
     @Autowired
@@ -30,6 +32,7 @@ public class BookRepoTest {
     }
     @Test
     @DisplayName("Print the list of Books")
+    @Transactional
     public void listOfBooks(){
         List<Book> book=repo.findAll();
         for(Book books:book){
