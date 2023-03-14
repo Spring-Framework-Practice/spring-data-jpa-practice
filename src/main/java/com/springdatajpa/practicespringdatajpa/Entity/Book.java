@@ -1,7 +1,10 @@
 package com.springdatajpa.practicespringdatajpa.Entity;
 
+import org.springframework.boot.actuate.audit.listener.AuditListener;
+
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EntityListeners;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -14,10 +17,13 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.ToString;
 
+
+
 @Entity
 @Data
 @Builder
 @NoArgsConstructor@AllArgsConstructor
+//Auditing the JPA Repository
 public class Book {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE)

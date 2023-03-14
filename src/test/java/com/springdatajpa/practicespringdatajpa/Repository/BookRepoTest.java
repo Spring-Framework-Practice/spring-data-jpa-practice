@@ -12,6 +12,8 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
+import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
+import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 
 import com.springdatajpa.practicespringdatajpa.Entity.Book;
 import com.springdatajpa.practicespringdatajpa.Entity.BookCategory;
@@ -88,6 +90,44 @@ public class BookRepoTest {
         Sort.by("id").descending());
         System.out.println(book2);
     }
-
-
+    @Test
+    @DisplayName("Creating the Custom Query")
+    public void DistinctName(){
+        Book book=repo.findDistinctByBookName("java");
+        System.out.println(book);
+    }
+    @Test
+    @DisplayName("Starting with")
+    public void startingName(){
+        Book book=repo.findByBookNameStartingWith("ja");
+        System.out.println(book);
+    }
+    @Test
+    @DisplayName("Custom Query")
+    public void customQueryCreation(){
+        Book book=repo.getBookName("Java");
+        System.out.println(book);
+    }
+    @Test
+    @DisplayName("Custom Query Based on the ID")
+    @Transactional
+    public void customQueryCreationBasedOnID(){
+        Book book = repo.getBookById(52L);
+        System.out.println(book);
+    }
+    @Test
+    @DisplayName("Native Query")
+    @Transactional
+    public void customNativeQuery(){
+        Book book= repo.getBookname("java");
+        System.out.println(book);
+    }
+    @Test
+    @DisplayName("Native Query using Param")
+    @Transactional
+    public void customQueryParam(){
+        Book book =repo.getBookNameByParam("Java");
+        System.out.println(book);
+    }
+    
 }
