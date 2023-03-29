@@ -1,0 +1,713 @@
+<%@page import= "java.util.*"%>
+<%@page import= "com.gepower.cb.VCAConstants"%>
+
+<script language="javascript" src="../js/validation.js"></script>
+<script language="javascript" src="../js/validationMessages.js"></script>
+<script language="javascript" src="../js/UtilFunctions.js"></script>
+<html>
+ <head>
+  <title>Voucher Code Application</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1">
+
+<body topmargin="0" leftmargin="0" MARGINHEIGHT="0" MARGINWIDTH="0"  >
+<%@ include file="header.jsp" %>
+
+<form name="CreateShopOrderActivity" method="post">
+
+<script language="JavaScript1.2">
+var INPUT_NAME_PREFIX = 'txt'; // this is being set via script
+var RADIO_NAME = 'totallyrad'; // this is being set via script
+var TABLE_NAME = 'tblSample'; // this should be named in the HTML
+var ROW_BASE = 1; // first number (for display)
+var CODE = "CODE";
+var DESC = "DESC";
+var DC = "DC";
+var SPAN = "SPAN";
+var selRow='inputName';
+var iteration_final = 0;
+var hasLoaded = false;
+window.onload=fillInRows;
+var temp=0;
+var add_val=0;
+var code = new Array();
+var desc = new Array();
+var sel = new Array();
+var dropDown = new Array();
+var dateOpen = new Array();
+var dateClose = new Array();
+var linebreak = "<br/>";
+
+
+function fillInRows()
+{
+ hasLoaded = true;
+ addRowToTable();
+ 
+}
+// CONFIG:
+// myRowObject is an object for storing information about the table rows
+function myRowObject(one, two, three, four,five,six,seven,eight)
+{
+ this.one = one; // text box 1 object
+ this.two = two; // text box2 object
+ this.three = three; // drop down box object
+ this.four = four; // calendar input
+ this.five = five; // calendar button
+ this.six=six;
+ this.seven = seven; // text box 4 object      
+ this.eight=eight;
+}
+/*
+ * insertRowToTable
+ * Insert and reorder
+ */
+function showCal1(cal,txt)
+{
+
+  addCalendar(cal,"Select Date",txt,"CreateShopOrderActivity");
+  showCal(cal);
+}
+
+/*
+ * addRowToTable
+ * Inserts at row 'num', or appends to the end if no arguments are passed in. Don't pass in empty strings.
+ */
+function addRowToTable(num)
+{
+ if (hasLoaded) {
+  var tbl = document.getElementById(TABLE_NAME);
+  var nextRow = tbl.tBodies[0].rows.length;
+  var iteration = nextRow + ROW_BASE;
+  
+  if (num == null) { 
+   num = nextRow;
+  } else {
+   iteration = num + ROW_BASE;
+  }
+  
+  // add the row
+  var row = tbl.tBodies[0].insertRow(num);
+   
+  // CONFIG: requires classes named classy0 and classy1
+   
+  // CONFIG: This whole section can be configured
+  
+  var cell0 = row.insertCell(0);
+  //var txtInp0 = document.createElement('input');
+  //alert(iteration);
+  var txtInp0=document.createElement("<INPUT TYPE='TEXT' maxlength='actLength' onBlur=changeToUpper(this) onFocus=changeToUpper(this) onChange=changeToUpper(this)>");
+  //txtInp0.setAttribute('type', 'text');
+//  onKeyDown=changeToUpper(this) onKeyUp=changeToUpper(this)
+  txtInp0.setAttribute('name', INPUT_NAME_PREFIX + iteration);
+  txtInp0.setAttribute('id', CODE+INPUT_NAME_PREFIX + iteration);
+  //txtInp0.setAttribute('size', '10');
+  
+  //StxtInp0.setAttribute('maxlength',actLength);
+  cell0.appendChild(txtInp0); 
+  
+  // cell 1 - input text
+  var cell1 = row.insertCell(1);
+  //var txtInp1 = document.createElement('input');
+  //var spanval=SPAN+INPUT_NAME_PREFIX + iteration;
+  //alert(spanval);
+  //SPAN+INPUT_NAME_PREFIX+iteration
+  var txtInp1=document.createElement("<INPUT TYPE='text' onKeyDown=\"Countchar(this.id,this.name,'Used {CHAR} of 50 characters',50)\" onKeyUp=\"Countchar(this.id,this.name,'Used {CHAR} of 50 characters',50)\" onBlur=changeToUpper(this) onFocus=changeToUpper(this) onChange=changeToUpper(this)>");
+  //txtInp1.setAttribute('type', 'text');
+//  onKeyUp=\"Countchar('shopOrderTitle','SPAN+INPUT_NAME_PREFIX + iteration','{CHAR} Characters left.',200);changeToUpper(this)\" onKeyDown=changeToUpper(this)\"\"Countchar('DESC+INPUT_NAME_PREFIX + iteration','SPAN+INPUT_NAME_PREFIX + iteration','{CHAR} Characters left.',50);
+  txtInp1.setAttribute('name', "SPAN"+INPUT_NAME_PREFIX + iteration);
+  txtInp1.setAttribute('id', DESC+INPUT_NAME_PREFIX + iteration);
+  txtInp1.setAttribute('maxlength', '50');
+  txtInp1.setAttribute('size', '50');
+  //txtInp1.setAttribute('onKeyDown', 'Countchar(\'DESC+INPUT_NAME_PREFIX + iteration\',\'SPAN+INPUT_NAME_PREFIX + iteration\',\'{CHAR} Characters left.\',50)');
+  //txtInpp1.onKeyDown('changeToUpper(this)');
+  cell1.appendChild(txtInp1);
+  
+  var cell2 = row.insertCell(2);
+  //var txtInp1 = document.createElement('input');
+  var txtInp2=document.createElement("<Strong><span>50 More Characters.</span></Strong>");
+  //txtInp1.setAttribute('type', 'text');
+  //txtInp2.class='minitext';
+  txtInp2.setAttribute('name', SPAN+INPUT_NAME_PREFIX + iteration);
+  txtInp2.setAttribute('id', SPAN+INPUT_NAME_PREFIX + iteration);
+  txtInp2.setAttribute('maxlength', '50');
+  txtInp2.setAttribute('size', '50');
+  cell2.appendChild(txtInp2);
+  
+                
+                //drop down cell with options open & close
+                var dropDown = row.insertCell(3);
+                 var sel = document.createElement('select');
+                 sel.name = 'selRow' + iteration;
+				 sel.id = 'selRow' + iteration;
+				 
+				 sel.options[0] = new Option('Open');
+                 sel.options[1] = new Option('Permanent');
+				 sel.options[2] = new Option('Closed');
+				 /*sel.options[0].value='Open';
+				 sel.options[2].value='Closed';
+				 sel.options[1].value='Permanent';*/
+				 sel.options[0].value='L';
+				 sel.options[2].value='C';
+				 sel.options[1].value='P';
+                 dropDown.appendChild(sel);
+                
+                // cell 1 - input text
+;
+/*var txtInp3 = document.createElement('input');
+txtInp3.type = 'text';
+txtInp3.id = INPUT_NAME_PREFIX + (iteration+1);
+txtInp3.readonly= 'true';
+txtInp3.size = '14';
+txtInp3.value = sysDate();*/
+var cell3 = row.insertCell(4)
+var txtInp3=document.createElement("<INPUT TYPE='text' readonly='true' size='14' >");
+txtInp3.value = sysDate();
+txtInp3.id = INPUT_NAME_PREFIX + (iteration+1);
+cell3.appendChild(txtInp3);
+
+// cell 4 - calendar button
+var cell4 = row.insertCell(5);
+var btnCal = document.createElement('input');
+btnCal.type = 'image';
+btnCal.name = 'addcal'+(iteration+1);
+btnCal.id = 'addcal'+(iteration+1);
+
+btnCal.href='#';
+btnCal.src = '../styles/show-calendar.gif';
+
+btnCal.onclick = function(){
+
+  showCal1('addcal'+(iteration+1),INPUT_NAME_PREFIX + (iteration+1));
+  
+ btnCal.disabled=true;
+  };
+cell4.appendChild(btnCal);
+// Hyperlink
+                     
+                                
+  var cell5 = row.insertCell(6);
+  //var txtInp5 = document.createElement('input');
+  var txtInp5=document.createElement("<INPUT TYPE='text' readonly='true' size='14' >");
+  //txtInp5.setAttribute('type', 'text');
+  txtInp5.setAttribute('name', DC+INPUT_NAME_PREFIX + iteration);
+  txtInp5.setAttribute('id', DC+INPUT_NAME_PREFIX + iteration);
+  //txtInp5.setAttribute('size', '10');
+  
+  cell5.appendChild(txtInp5);
+  
+  /* var txtInp6=document.createElement("<INPUT TYPE='text' readonly='true' size='14' >");
+  //txtInp5.setAttribute('type', 'text');
+  txtInp5.setAttribute('name', DC+INPUT_NAME_PREFIX + iteration);
+  txtInp5.setAttribute('id', DC+INPUT_NAME_PREFIX + iteration);
+  //txtInp5.setAttribute('size', '10');
+  
+  cell4.appendChild(txtInp5); */
+
+  // cell 6 - input button
+   
+var cell6 = row.insertCell(7);
+var btnCalcls = document.createElement('input');
+btnCalcls.type = 'image';
+btnCalcls.name = 'addcalcls'+(iteration+1);
+btnCalcls.id = 'addcalcls'+(iteration+1);
+
+btnCalcls.href='#';
+btnCalcls.src = '../styles/show-calendar.gif';
+
+btnCalcls.onclick = function(){
+
+  showCal1('addcalcls'+(iteration+1),DC+INPUT_NAME_PREFIX + iteration);
+  
+ btnCalcls.disabled=true;
+  };
+
+  cell6.appendChild(btnCalcls);
+  
+  var cell7 = row.insertCell(8);
+  var btnEl = document.createElement("<INPUT TYPE='button' readonly='true' size='14' class='butn' value='Delete'>");
+	//  document.createElement('input');
+  //btnEl.setAttribute('type', 'button');
+  //btnEl.setAttribute('value', 'Delete');
+  //btnEl.setAttribute('class', 'butn');
+  btnEl.onclick = function () 
+  {
+  deleteCurrentRow(this)};
+  cell7.appendChild(btnEl);
+                
+                // cell 6 - input checkbox
+  
+  
+  // Pass in the elements you want to reference later
+  // Store the myRow object in each row
+
+  row.myRow = new myRowObject(txtInp0, txtInp1,txtInp2,sel, txtInp3,btnCal,txtInp5,btnCalcls);
+
+ }
+ 
+ iteration_final=iteration;
+
+ 
+}
+
+// If there isn't an element with an onclick event in your row, then this function can't be used.
+function deleteCurrentRow(obj)
+{
+ if (hasLoaded) {
+  var delRow = obj.parentNode.parentNode;
+  var tbl = delRow.parentNode.parentNode;
+  var rIndex = delRow.sectionRowIndex;
+  var rowArray = new Array(delRow);
+  deleteRows(rowArray);
+ // validate(rIndex);
+  reorderRows(tbl, rIndex);
+  }
+}
+function reorderRows(tbl, startingIndex)
+{
+ if (hasLoaded) {
+  if (tbl.tBodies[0].rows[startingIndex]) {
+   var count = startingIndex + ROW_BASE;
+ //  var count = 0;
+   for (var i=startingIndex; i<tbl.tBodies[0].rows.length; i++) {
+   
+    // CONFIG: next line is affected by myRowObject settings
+    tbl.tBodies[0].rows[i].myRow.one.id = CODE+INPUT_NAME_PREFIX + count; // input text
+
+    // CONFIG: next line is affected by myRowObject settings
+    tbl.tBodies[0].rows[i].myRow.two.id = DESC+INPUT_NAME_PREFIX + count; // input text
+                               
+                                // CONFIG: next line is affected by myRowObject settings
+    tbl.tBodies[0].rows[i].myRow.three.id = selRow + count; // input text
+    
+                                // CONFIG: next line is affected by myRowObject settings
+    tbl.tBodies[0].rows[i].myRow.four.id = INPUT_NAME_PREFIX + count; // input text
+                                                                                     
+                                // CONFIG: next line is affected by myRowObject settings
+    tbl.tBodies[0].rows[i].myRow.five.id = DC+INPUT_NAME_PREFIX + count; // input text
+          // alert('test it ::::' +tbl.tBodies[0].rows[i].myRow.five.id);                     
+    //CONFIG: requires class named classy0 and classy1 
+    //
+                                
+    //tbl.tBodies[0].rows[i].className = 'classy' + (count % 2);
+    count++;
+   }
+  }
+ }
+}
+function deleteRows(rowObjArray)
+{
+ if (hasLoaded) {
+  for (var i=0; i<rowObjArray.length; i++) {
+   var rIndex = rowObjArray[i].sectionRowIndex;
+   rowObjArray[i].parentNode.deleteRow(rIndex);
+
+   iteration_final--;
+  // alert("deleted"+iteration_final);
+  }
+ }
+}
+
+function doNext(){
+var z = (iteration_final - 1);
+var iterator1 =  '';
+var check = [];
+for(var i=2;i<=iteration_final;i++){
+code[i]= document.getElementById(CODE+INPUT_NAME_PREFIX + i).value;
+
+if (code[i]=="") {
+alert(validActivityCodeValue);
+document.getElementById(CODE+INPUT_NAME_PREFIX + i).focus();
+return false;
+}
+
+desc[i]= document.getElementById(DESC+INPUT_NAME_PREFIX + i).value;
+//alert(desc[i]);
+if (desc[i]=="") {
+	alert(validActivityDescValue);
+	document.getElementById(DESC+INPUT_NAME_PREFIX + i).focus();
+	return false;
+}
+
+if (desc[i].length >= 50)
+{
+	alert(charlimitValidationForActivDesc);
+	document.getElementById(DESC+INPUT_NAME_PREFIX + i).focus();
+	return false;
+
+}
+
+var soLength=document.CreateShopOrderActivity.shopOrderCode.value.length;
+  var actLength=(24-soLength);
+  
+
+  if (code[i].length>actLength)
+{
+ 
+ alert("Activity Code can not exceed "+actLength+" characters"); 
+ return false;
+  
+}
+
+
+	if (chkSplCharValidationForACT(code[i]))
+	 {
+	
+	   alert(charValidationForActivCode);
+	   return false;
+	 }
+	 
+	if (chkSplCharValidation(desc[i]))
+	 {
+	
+	   alert(charValidationForActivDesc);
+	   return false;
+	 } 
+  sel[i]= document.getElementById("selRow"+i).value;
+
+    if (sel[i]=="C")
+	{
+       if(chkForBlank(document.getElementById(DC+INPUT_NAME_PREFIX + i).value))
+		{
+		  
+           alert("The Activity Close Date can not be blank if the Status is C, (at line"+(i-1)+")");
+		   return false;
+		}
+       
+    }
+
+/*var iChars1 = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~`";
+
+  for (var j = 0; j < desc[i].length; j++) {
+  	if (iChars1.indexOf(desc[i].charAt(j)) != -1) {
+  	alert (charValidationForActivDesc);
+  	return false;
+  	}
+ }
+
+var iChars = "!@#$%^&*()+=-[]\\\';,/{}|\":<>?~` ";
+
+  for (var j = 0; j < code[i].length; j++) {
+  	if (iChars.indexOf(code[i].charAt(j)) != -1) {
+  	alert (charValidationForActivCode);
+  	return false;
+  	}
+ }*/
+
+
+	
+dateOpen[i]= document.getElementById(INPUT_NAME_PREFIX + (i+1)).value;
+//alert(dateOpen[i]);
+if (dateOpen[i]=="") {
+alert(validActivityOpenDateValue);
+document.getElementById(INPUT_NAME_PREFIX + (i+1)).focus();
+return false;
+}
+       var openDate=new Date(dateOpen[i]);
+        var closeDate=new Date(document.getElementById(DC+INPUT_NAME_PREFIX + i).value);
+		if(closeDate!="")
+		{
+		  if (Date.parse(openDate) > Date.parse(closeDate)) {
+			//alert("Invalid Date Range!\nStart Date cannot be after End Date!")
+			alert(validOpenDateCheck);
+			return false;
+		}   
+
+		}	 
+
+if (document.getElementById(DC+INPUT_NAME_PREFIX + i).value == ""){
+	document.getElementById(DC+INPUT_NAME_PREFIX + i).value = "";
+}
+else{
+	dateClose[i] = document.getElementById(DC+INPUT_NAME_PREFIX + i).value;	
+}
+
+
+//abc = document.CreateShopOrderActivity.shopOrderCode.value+"~"+document.getElementById(CODE+INPUT_NAME_PREFIX + i).value + '~' + document.getElementById(DESC+INPUT_NAME_PREFIX + i).value + '~' + document.getElementById("selRow"+i).value + '~' + document.getElementById(INPUT_NAME_PREFIX + (i+1)).value + '~' + document.getElementById(DC+INPUT_NAME_PREFIX + i).value + '#';
+
+abc = document.CreateShopOrderActivity.shopOrderCode.value+"~"+document.getElementById(CODE+INPUT_NAME_PREFIX + i).value + '~' + document.getElementById(DESC+INPUT_NAME_PREFIX + i).value + '~' +  document.getElementById(INPUT_NAME_PREFIX + (i+1)).value + '~' + document.getElementById(DC+INPUT_NAME_PREFIX + i).value + '~' + document.getElementById("selRow"+i).value +'#';
+
+check[i] = abc;
+}
+for ( i = 2; i <= (z+1); i++ ){
+ 	iterator1 = iterator1 + check[i];
+}		
+	   	
+		
+		//alert(iterator1);
+		document.CreateShopOrderActivity.method="POST";
+		document.CreateShopOrderActivity.iterActivities.value = iterator1;
+		document.CreateShopOrderActivity.action = "createActivities_Detail";
+        document.CreateShopOrderActivity.submit();
+}
+
+function sysDate(){
+var d=new Date();   
+var day=d.getDate();
+var month = d.getMonth()+1;
+if(month<10) {
+ month = "0"+month;
+}
+if(day<10){
+day = "0"+day;
+}
+
+var year = d.getFullYear();
+var systemDate = month+"/"+day+"/"+year;
+//document.form.txt1.value = systemDate;
+return systemDate;
+
+
+}
+
+</script>
+
+<!-- <input type="hidden" name="itrActData" value=""/> -->
+<input type="hidden" name="iterActivities" value=""/>
+<input type="hidden" name="ShopOrderCodeFromSummary"/>
+<input type="hidden" name="formName" value= "CreateShopOrderActivity"/>
+
+
+
+<script language="JavaScript1.2" src="../scripts/coolmenus3.js"></script>
+  <script language="javascript" src="../styles/cal2.js"></script>
+  <script language="javascript" src="../styles/cal_conf2.js"></script>
+  <script language="javascript" src="../styles/callFunctions.js"></script>
+<script language="javascript" src="../js/cmn_functions.js"></script>
+
+  <link href="../scripts/css_vca.css" rel="stylesheet" type="text/css">
+</head>
+<%@ page import="com.gepower.cb.VCAUtil" %>
+<%@ page import="com.gepower.cb.VCAConstants" %>
+
+
+<% 
+if (((String)session.getAttribute(VCAConstants.USER_VCA_ROLE)).equalsIgnoreCase(VCAConstants.USER_VCA_MASTER)) {%>
+<script language="JavaScript1.2" src="../scripts/vca_menu.js">
+</script>
+<%} 
+else if (((String)session.getAttribute(VCAConstants.USER_VCA_ROLE)).equalsIgnoreCase(VCAConstants.USER_WATER_VCA_MASTER)) {%>
+<script language="JavaScript1.2" src="../scripts/vca_menu_water.js">
+</script>
+<%}
+else {%>
+<script language="JavaScript1.2" src="../scripts/vca_menu_user.js">
+</script>
+<%}%>
+<script>
+</script>
+<table  border="0" cellspacing="0" cellpadding="0" class="table_one">
+ <tr>
+  <td><!-- <img src="../images/ge_logo.jpg" alt="GE Energy Logo"> --></td>
+  <td align="right"><img src="../images/vca_logo.jpg" alt="Voucher Code Application Logo"></td>
+ </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_two">
+ <tr>
+  <td align="right"></td>
+ </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_three">
+ <tr>
+  <td><img src="../images/spacer.gif"></td>
+ </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_four">
+ <tr>
+  <td></td>
+ </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0" class="table_content">
+ <tr>
+  <td align="center" valign="top">
+   <table  border="0" align="right" cellpadding="3" cellspacing="3">
+    <tr> 
+     <td align="center" class="tbl_bg2_content"><img src="../images/icon4.gif" width="12" height="13"></td>
+     <td align="center" class="tbl_bg2_content">Welcome <strong>User&nbsp<%=(String)session.getAttribute(VCAConstants.USER_DISPLAY_NAME)%></td>
+    </tr>
+   </table>
+   </br></br>
+
+   <table  border="0" align="center" cellspacing="0" cellpadding="0" class="tbl_bg2" width="100%">
+          <tr class="tbl_bg2_content_hdr"> 
+            <td width="617"  height="18"><img src="../images/icon1.gif" width="12" height="13" align="absbottom">&nbsp;Create Activity From Voucher Code
+              </td>
+          </tr>
+         
+		  <tr align="center" class="tbl_bg2_content"> 
+            
+			    <td><br><br><br><br><br><br>
+              <%
+				String submitResult = (String) request.getAttribute("resultString");
+				if(VCAUtil.checkString(submitResult) && (submitResult.equalsIgnoreCase("false"))){
+               %>
+               <tr><td align="center"><font color = "red" ><strong>Voucher Code/Project Created Successfully</strong></td></tr>
+                   
+			   <%}%>
+      
+
+      <% 		
+	             
+                 String code = request.getParameter("shopOrderCodeForActivities");
+                 String title = request.getParameter("title");
+                 char carriegeReturn = '\r';
+                 char newLine = '\n';
+                 String newLineCharToRemoveWindows = "";
+                 String newLineCharToRemoveUnix = "";
+                 String newLineCharToRemoveMac = "";
+                 newLineCharToRemoveWindows = newLineCharToRemoveWindows +  carriegeReturn + newLine;
+                 newLineCharToRemoveUnix = newLineCharToRemoveUnix + newLine;
+                 newLineCharToRemoveMac = newLineCharToRemoveMac + carriegeReturn;
+                 if(title != null){
+						if (title.indexOf(newLineCharToRemoveWindows) != -1){
+							title = title.replaceAll(newLineCharToRemoveWindows, " ");
+						} else if (title.indexOf(newLineCharToRemoveUnix) != -1) {
+							title = title.replaceAll(newLineCharToRemoveUnix, " ");
+						} else if (title.indexOf(newLineCharToRemoveMac) != -1) {
+							title = title.replaceAll(newLineCharToRemoveMac, " ");
+						}
+					}
+                 title = title.replaceAll(System.getProperty("line.separator")," ");
+                 String soclass = request.getParameter("shopOrderClass1");
+                 String sosclass = request.getParameter("subClassFromSummary");                 
+                 String fundCode = request.getParameter("fundCode");
+                 String status = request.getParameter("status");
+                 String applied = request.getParameter("applied");
+                 String charge = request.getParameter("charge");
+                 String pay = request.getParameter("pay");
+                 String dO = request.getParameter("dateOpen");
+				 String dC = request.getParameter("dateClosed");
+                 
+                 
+              %>   
+                <table class="tbl_data" >			  
+				 <tr> 
+                  <th width="25%" align="right" class="tbl_data_odd" >Voucher Code/Project Number 
+                    <font color = "red"></font>:</th>
+                  <td width="25%" align="left"><input name="shopOrderCode" type="text" maxlength = "25" class="txtfld" value="<%= VCAUtil.isNull(code)%>" readonly/></td>
+                  
+				  <th width="25%" align="right" class="tbl_data_odd" id="title_1" >Voucher/Project Description<font color = "red"></font> 
+                    </th>
+                  <td width="25%" align="left"><TextArea  name="title"  rows=2 cols=25 class="txtfld" readonly><%= VCAUtil.isNull(title) %></TextArea></td>
+                </tr>
+                <tr>
+								<th align="right" class="tbl_data_odd" >Class</th>
+								<td align="left"><input name="second23" type="text" class="txtfld" value="<%=VCAUtil.isNull(soclass)%>" readonly/></td>
+								
+								<th align="right" class="tbl_data_odd" >SubClass</th>
+								<td align="left"><input name="shopOrderSubClass" type="text" class="txtfld" value="<%=VCAUtil.isNull(sosclass)%>" readonly/></td>
+				</tr> 
+                  
+
+				 
+				  <tr>
+				  <th align="right" class="tbl_data_odd" >Fund Code<font color = "red"></font></th>
+                 <!--  <td align="left"> <select name="select" class="listbox">
+						<option>IN</option>
+						<option>EX</option>
+                    </select> </td> -->
+               <td width="25%" align="left"><input name="funcode" type="text" maxlength = "25" class="txtfld" value = "<%=VCAUtil.isNull(fundCode)%>" readonly/></td>
+                  
+				  <th align="right" class="tbl_data_odd" >Status<font color = "red"></font></th>
+                 <!--  <td align="left"> <select name="select" class="listbox">
+						<option>Open</option>
+						<option>Permanent</option>
+    					<option>Closed</option>
+                    </select> </td> --> 
+					<td width="25%" align="left"><input name="status" type="text" maxlength = "25" class="txtfld" value = "<%=VCAUtil.isNull(status)%>" readonly/></td>
+					</tr>
+                  <!--<th align="right" class="tbl_data_odd" >Customer PO/Ref#:</th>
+                  <td align="left"><input name="second26" type="text" class="txtfld"/></td>-->
+				  <tr>
+				  <th align="right" class="tbl_data_odd" >Applied/UnApplied<font color = "red"></font></th>
+                  <!-- <td align="left"> <select name="select" class="listbox">
+						<option>A</option>
+						<option>UA</option>
+                    </select> </td> -->
+                <td width="25%" align="left"><input name="applied" type="text" maxlength = "25" class="txtfld" value = "<%=VCAUtil.isNull(applied)%>" readonly/></td>
+                  <!--<th align="right" class="tbl_data_odd" >Created By:</th>
+                  <td align="left"><input name="second262" type="text" class="txtfld"/></td>-->
+                   <th align="right" class="tbl_data_odd" >Charge<font color = "red"></font></th>
+                  <!-- <td align="left"> <select name="select" class="listbox">
+						<option>Y</option>
+						<option>N</option>
+                    </select> </td> --> 
+					<td width="25%" align="left"><input name="charge" type="text" maxlength = "25" class="txtfld" value = "<%=VCAUtil.isNull(charge)%>" readonly/></td>
+					</tr>
+					<tr>
+<!--                  <th align="right" class="tbl_data_odd" >&nbsp;</th>-->
+                  <th align="right" class="tbl_data_odd" >Pay<font color = "red"></font></th>
+                  <!-- <td align="left"> <select name="select" class="listbox">
+						<option>Y</option>
+						<option>N</option>
+                    </select> </td> -->
+					<td width="25%" align="left"><input name="pay" type="text" maxlength = "25" class="txtfld" value = "<%=VCAUtil.isNull(pay)%>" readonly/></td>
+                  <td align="left">&nbsp;</td> </tr>
+
+				   <tr> 
+                  <th align="right" class="tbl_data_odd" >Date Opened:<font color = "red"></font></th>
+                  <td align="left"> <input  type="text" name="txt1" size=20 class="txtfld" value = "<%=VCAUtil.isNull(dO)%>" readonly > 
+                    <!-- <a href="javascript:showCal('cal1')"> <img src="../styles/show-calendar.gif" border="0" align="top"> 
+                    </a> --></td>
+                  <th align="right" class="tbl_data_odd" >Date Closed:</th>
+                  <td align="left"><input type="text" value = "<%=VCAUtil.isNull(dC)%>" readonly  name="txt2" size=20 class="txtfld"> 
+                    <!-- <a href="javascript:showCal('cal2')"> <img src="../styles/show-calendar.gif" border="0" align="top"> 
+                    </a> --> </td>
+                </tr>
+				         
+     </table>
+
+
+   <table align = "center" class="tbl_bg2_content" border = "0">
+     <tr align="absbottom" class="tbl_bg2_content_hdr">
+	 <!--<td></td>-->
+	 <br>
+	 &nbsp&nbsp&nbsp&nbsp&nbsp&nbsp&nbsp<td align="center"><font color = "red" ><strong>Mandatory Fields are Marked with *</strong></td>
+     </tr>
+   <!--</table>-->
+		<!--  <td align="middle"><input type="button" value="Add Activity" onclick="addRowToTable();" /> -->
+    <tr>
+     <td>
+     <table class="tbl_data" border = "0" id="tblSample" width="80%">
+       </br></br>
+       <tr align = "middle"> 
+	    <th width="10%" valign="left" class="tbl_data_odd" >Activity Code<font color = "red">*</font>:</th> 
+        <th width="10%" valign="left" class="tbl_data_odd" >Activity Description<strong>(A Maximum of 50 Characters)</strong><font color = "red">*</font>:</th> 
+        <th width="10%" align="middle" class="tbl_data_odd" >Character Count<font color = "red">*</font></th>
+		<th width="10%" align="middle" class="tbl_data_odd" >Status<font color = "red">*</font></th>
+        <th width="35%" valign="left" class="tbl_data_odd" >Date Opened<font color = "red">*</font>:</th>
+        <th width="8%" valign="right" class="tbl_data_odd" ></th>
+		<th width="35%" valign="right" class="tbl_data_odd" >Date Closed:</th>
+        <th width="25%" valign="right" class="tbl_data_odd"></th>
+        <td align="right"><input type="button" class="butn" value="Add Activity" onclick="addRowToTable();"/></td>
+        <!-- <checkbox name="one" property="selectAll"
+         onclick="checkAll()"/> -->
+       </tr>
+	</table>
+      
+     </td>
+    </tr>
+    <table align = "center" border = "0">
+    <tr align="middle"> 
+        <td> &nbsp;&nbsp;&nbsp;&nbsp;</td>
+        <td align ="middle"><input type="button" name="Submit" value="Update" align="middle" class="butn" onClick="return  doNext();"/></td> 
+        <td align="left"><input type="Reset" name="Submit" value="Reset" align="middle" class="butn"  /></td>
+       </tr><table>
+   </table>
+
+    
+<table>
+<tr> <td> &nbsp;&nbsp;</td> </tr>
+<tr> <td> &nbsp;&nbsp;</td> </tr>
+<tr> <td> &nbsp;&nbsp;</td> </tr>
+</table>
+<table width="100%" border="0" cellspacing="0" cellpadding="0">
+  <tr> 
+    <td align="center" class="table_copyright_line"><img src="../images/spacer.gif" width="1" height="1"></td>
+  </tr>
+  <tr> 
+      <td align="center" class="footer_copyright_index">&copy; 1997- 2007 General Electric Company. All Rights Reserved.</td>
+  </tr>
+</table>
+</form>
+</body>
+</html>
